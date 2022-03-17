@@ -11,5 +11,6 @@ linkRouter.post(
   validateSchemaMiddleware(linkSchema),
   postLink
 );
+linkRouter.get("/urls/:shortUrl", validateTokenMiddleware);
 
 export default linkRouter;
