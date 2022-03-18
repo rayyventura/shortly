@@ -41,3 +41,30 @@ export async function getUrl(req, res) {
     res.sendStatus(500);
   }
 }
+
+export async function deletUrl(req, res) {
+  const { id } = req.params;
+  const { user } = res.locals;
+  try {
+    const { rows: url } = await connection.query(
+      `
+    SELECT * FROM urls WHERE id=$1
+      `,
+      [id]
+    );
+
+    if (url[0].userid !== user.id) {
+      return res.sendStatus(401);
+    }
+    await connection.query(
+      `
+      DELETE FROM urls WHERE id=$1
+      `,
+      [id]
+    );
+    res.sendStatus(204);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+}

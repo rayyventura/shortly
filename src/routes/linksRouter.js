@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getUrl, postLink } from "../controllers/linksController.js";
+import { deletUrl, getUrl, postLink } from "../controllers/linksController.js";
 import { validateSchemaMiddleware } from "../middlewares/validateSchemaMiddleware.js";
 import { validateTokenMiddleware } from "../middlewares/validateTokenMiddleware.js";
 import linkSchema from "../schemas/linkSchema.js";
@@ -12,5 +12,6 @@ linkRouter.post(
   postLink
 );
 linkRouter.get("/urls/:shortUrl", getUrl);
+linkRouter.delete("/urls/:id", validateTokenMiddleware, deletUrl);
 
 export default linkRouter;
