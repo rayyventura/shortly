@@ -98,3 +98,20 @@ export async function getUserUrls(req, res) {
     res.sendStatus(500);
   }
 }
+
+export async function usersRanking(req, res) {
+  try {
+    const { rows: userData } = await connection.query(`
+     SELECT u.id,u.name, SUM(li.viewscount) AS viewscount, COUNT(li.url) AS linkscount FROM users u
+     LEFT JOIN urls li
+     ON u.id=li.userid
+     GROUP BY u.id
+     ORDER BY viewscount DESC
+     `);
+
+    res.send(userData);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+}
