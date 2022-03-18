@@ -34,7 +34,17 @@ export async function getUrl(req, res) {
       return res.sendStatus(404);
     }
 
+    await connection.query(
+      `
+    UPDATE urls
+    SET viewscount=viewscount+1
+    WHERE "shortUrl"=$1
+    `,
+      [shortUrl]
+    );
+
     delete existingUrl[0].userid;
+    delete existingUrl[0].viewscount;
     res.send(existingUrl[0]);
   } catch (error) {
     console.log(error);
