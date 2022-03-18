@@ -21,3 +21,23 @@ export async function postLink(req, res) {
     res.sendStatus(500);
   }
 }
+export async function getUrl(req, res) {
+  const { shortUrl } = req.params;
+  try {
+    const { rows: existingUrl } = await connection.query(
+      `
+      SELECT *  FROM urls WHERE "shortUrl"=$1
+     `,
+      [shortUrl]
+    );
+    if (!existingUrl[0]) {
+      return res.sendStatus(404);
+    }
+
+    delete existingUrl[0].userid;
+    res.send(existingUrl[0]);
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
+}
